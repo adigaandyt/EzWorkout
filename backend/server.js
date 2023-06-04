@@ -6,10 +6,16 @@ const dotenv = require('dotenv').config()
 const PORT = process.env.PORT || 5000
 const app = express()
 const userRoutes = require('./routes/userRoutes')
+const { errHandler } = require('./middleware/errorMiddleware')
+
+//middleware that allows the use of raw JSON folders
+app.use(express.json())
+//Middleware to use the URL encoded JSON (sent with Postman)
+app.use(express.urlencoded({ extended: false }))
 
 //Creating a route in express
 app.get('/', (req, res) => {
-  res.status(200).send({ msg: 'This is a jason file' })
+  res.status(200).send({ msg: 'Welcome to EzWorkout API' })
 })
 
 //Routes
@@ -17,5 +23,9 @@ app.get('/', (req, res) => {
 //Will handle the routing, but it will add api/users and then w/e is
 //written in the userRoutes folder
 app.use('/api/users', userRoutes)
+
+//Use our custom error handler middleware
+//PLACMENT IS IMPORTANT HAS TO BE UNDER USE ROUTES
+app.use(errHandler)
 
 app.listen(PORT, () => console.log(`Server start on port ${PORT}`))
