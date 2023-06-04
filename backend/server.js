@@ -4,9 +4,14 @@ const express = require('express')
 const dotenv = require('dotenv').config()
 //This reads the PORT var in the .env folder
 const PORT = process.env.PORT || 5000
-const app = express()
 const userRoutes = require('./routes/userRoutes')
 const { errHandler } = require('./middleware/errorMiddleware')
+const colors = require('colors')
+const { connectDB } = require('./config/db')
+
+connectDB()
+
+const app = express()
 
 //middleware that allows the use of raw JSON folders
 app.use(express.json())
